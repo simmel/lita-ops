@@ -1,4 +1,5 @@
 require "lita"
+require "monkeypatches"
 
 module Lita
   module Handlers
