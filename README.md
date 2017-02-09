@@ -1,6 +1,6 @@
 # lita-ops
 
-TODO: Add a description of the plugin.
+Ops people in your IRC channels.
 
 ## Installation
 
@@ -12,8 +12,17 @@ gem "lita-ops"
 
 ## Configuration
 
-TODO: Describe any configuration attributes the plugin exposes.
+### Required attributes
+
+* `should_be_oped` (Hash) - A hash of channels with an array of user masks as the value. E.g:
+```
+  config.handlers.ops.should_be_oped = {
+    "#marvintesting" => %w(
+      simmel!simmel@auxww.ps
+    )
+  }
+```
 
 ## Usage
 
-TODO: Describe the plugin's features and how to use them.
+Add the config and op your bot and it will op the people you want.
