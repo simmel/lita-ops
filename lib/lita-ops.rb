@@ -12,14 +12,10 @@ module Lita
         end
       end
 
-      on :room_join, :op
+      on :user_joined_room, :op
 
       def op(payload)
-        target = Source.new(room: payload[:room])
-        nick = payload[:nick]
-        channel = Cinch::Channel.new(target.room, robot.send(:adapter).cinch)
-        Lita.logger.debug("Oping nick #{nick} in channel #{target.room}")
-        channel.op(nick)
+        payload[:room].op(robot, nick)
       end
 
     end

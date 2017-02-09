@@ -1,31 +1,12 @@
 module ::Lita
-  module Adapters
-    class IRC < Adapter
-      class CinchPlugin
+  class Room
 
-        listen_to :channel, method: :on_room_message
-        listen_to :join, method: :on_room_join
-
-        def on_room_message(m)
-          unless m.user.nick == robot.send(:adapter).cinch.nick
-            robot.trigger(:room_message,
-                          room: m.channel.name,
-                          message: m.message,
-                          nick: m.user.nick,
-                         )
-          end
-        end
-
-        def on_room_join(m)
-          unless m.user.nick == robot.send(:adapter).cinch.nick
-            robot.trigger(:room_join,
-                          room: m.channel.name,
-                          nick: m.user.nick,
-                         )
-          end
-        end
-
-      end
+    def op(robot, nick)
+      cinch = robot.send(:adapter).cinch
+      channel = cinch.channel_list.find_ensured(self.name)
+      Lita.logger.debug "Oping #{nick} in #{self.name}"
+      channel.op(nick)
     end
+
   end
 end
