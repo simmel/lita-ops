@@ -16,19 +16,25 @@ module Lita
 
       on :user_joined_room, :op
 
+      def should_be_oped?(channel, nick)
+        if config.should_be_oped.include?(channel)
+          config.should_be_oped[channel].each do |u|
+            # FIXME http://www.rubydoc.info/github/cinchrb/cinch/Cinch/User#match-instance_method
+            if nick.mask.eql? Cinch::Mask.new(u)
+              log.debug "#{u} matched!"
+              return true
+            end
+          end
+        end
+        return false
+      end
+
       def op(payload)
         cinch = robot.send(:adapter).cinch
         nick = cinch.user_list.find_ensured(payload[:user].name)
         channel = payload[:room].name
 
-        if config.should_be_oped.include?(channel)
-          config.should_be_oped[channel].each do |u|
-            if nick.mask.eql? Cinch::Mask.new(u)
-              log.debug "#{u} matched!"
-              payload[:room].op(robot, nick)
-            end
-          end
-        end
+        payload[:room].op(robot, nick) if should_be_oped?(channel, nick)
       end
 
     end
