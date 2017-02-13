@@ -19,8 +19,7 @@ module Lita
       def should_be_oped?(channel, nick)
         if config.should_be_oped.include?(channel)
           config.should_be_oped[channel].each do |u|
-            # FIXME http://www.rubydoc.info/github/cinchrb/cinch/Cinch/User#match-instance_method
-            if nick.mask.eql? Cinch::Mask.new(u)
+            if Cinch::Mask.new(u) =~ nick.mask
               log.debug "#{u} matched!"
               return true
             end
